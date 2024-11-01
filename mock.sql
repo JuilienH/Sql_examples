@@ -386,3 +386,21 @@ SELECT SUM(like_act),
 FROM basetable
 
 WHERE created_at BETWEEN '2020-11-21' AND '2020-12-25';
+
+/*create two subtables and join them*/
+
+WITH table1 AS(
+  SELECT id, salary FROM students
+  INNER JOIN
+  offer 
+  ON students.id=offer.id),
+    table2 AS(
+  SELECT id, salary FROM friend
+  INNER JOIN 
+  offer 
+  ON friend.id=offer.id)
+SELECT table1.id,table1.salary,table2.id,table2.salary
+FROM table1
+LEFT JOIN
+ON table1.id=table2.id
+WHERE table2.salary gt table1.salary;
