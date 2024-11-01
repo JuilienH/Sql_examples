@@ -404,3 +404,9 @@ FROM table1
 LEFT JOIN
 ON table1.id=table2.id
 WHERE table2.salary gt table1.salary;
+
+/*Pivoting two columns, name and occupations using CASW WHEN END*/
+SELECT
+(CASE WHEN occupation='Doctor' THEN name ELSE Null END) AS Doctor,
+(CASE WHEN occupation='Singer' THEN name ELSE Null END) AS Singer
+FROM one_table
