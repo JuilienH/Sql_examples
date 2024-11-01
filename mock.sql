@@ -416,3 +416,25 @@ FROM
   
   ) AS second_table
 GROUP BY row_num
+
+/*subgquery examples*/
+/*1. the table source is a subquery*/
+
+SELECT *
+FROM
+(SELECT FROM) AS sub_table;
+
+/*2. The conditions are caculated and need to use HAVING clause to reference it*/
+SELECT *
+FROM main__table
+HAVING value=
+(SELECT MAX(variable) FROM main_table WHERE) or (SELECT AVG(varaible2) FROM main_table WHERE);
+
+/*3. one of the tables to be join is a subquery*/
+SELECT a.id, b.id
+FROM a
+JOIN
+(SELECT id, name, salary, location FROM tbl ) AS b
+
+ON a.id=b.id;
+
