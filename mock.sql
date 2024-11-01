@@ -387,7 +387,7 @@ FROM basetable
 
 WHERE created_at BETWEEN '2020-11-21' AND '2020-12-25';
 
-/*create two subtables and join them*/
+/*create two subtables and join them */
 
 WITH table1 AS(
   SELECT id, salary FROM students
@@ -405,8 +405,14 @@ LEFT JOIN
 ON table1.id=table2.id
 WHERE table2.salary gt table1.salary;
 
-/*Pivoting two columns, name and occupations using CASW WHEN END*/
+/*Pivoting two columns, name and occupations using CASW WHEN END from the second table with new column added in*/
 SELECT
 (CASE WHEN occupation='Doctor' THEN name ELSE Null END) AS Doctor,
 (CASE WHEN occupation='Singer' THEN name ELSE Null END) AS Singer
-FROM one_table
+FROM 
+  (SELECT name, occupation,
+  ROW_NUMBER() OVER (PARTITION BY occupation ORDER BY name) AS row_num
+  FROM first_table
+  
+  ) AS second_table
+GROUP BY row_num
