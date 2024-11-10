@@ -1,3 +1,4 @@
+#These syntaxes are written against MySQL version >8.0. There would be some nuances if these are applied to PostGresSQL or SnowSQL. 
 SELECT e.first_name, e.last_name, e.salary,
   d.name as department_name
 FROM employees   AS e
@@ -389,21 +390,18 @@ WHERE created_at BETWEEN '2020-11-21' AND '2020-12-25';
 
 /*create two subtables and join them */
 
-WITH table1 AS(
-  SELECT id, salary FROM students
-  INNER JOIN
-  offer 
-  ON students.id=offer.id),
-    table2 AS(
-  SELECT id, salary FROM friend
-  INNER JOIN 
-  offer 
-  ON friend.id=offer.id)
-SELECT table1.id,table1.salary,table2.id,table2.salary
-FROM table1
+WITH one AS (SELECT a.ID,a.name, b.salary AS mine
+FROM students a
 LEFT JOIN
-ON table1.id=table2.id
-WHERE table2.salary gt table1.salary;
+packages b
+ON a.ID=b.ID),
+two AS (SELECT c.ID,c.Friend_ID, b.salary AS f
+FROM friends c
+LEFT JOIN
+packages b
+ON c.Friend_ID=b.ID)
+
+SELECT name FROM one INNER JOIN two ON one.ID=two.ID WHERE one.mine<two.f ORDER BY two.f;
 
 /*Pivoting two columns, name and occupations using CASW WHEN END from the second table with new column added in*/
 SELECT
@@ -437,4 +435,14 @@ JOIN
 (SELECT id, name, salary, location FROM tbl ) AS b
 
 ON a.id=b.id;
+
+
+
+#concatenation, compress the file on single column: group_category 
+WITH mytable AS (SELECT group_category, name, count(*) AS headcounts GROUP BY group_category, name )
+
+SELECT group_category, GORUP_CONCAT(CONCAT(name, "*", headcounts) ORDER BY name ASC, headcounts DESC)
+GROUP BY group_category;
+
+
 
